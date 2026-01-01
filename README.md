@@ -3,8 +3,8 @@ Pastas que não foram comprimidas do mediafire são difíceis de baixar e requer
 
 Neste repositório, você encontrará ao todo 3 scripts em python
 
-mediafire_scraper.py
-downloader_requests.py
+mediafire_scraper.py,
+downloader_requests.py,
 downloader_selenium.py
 
 Para funcionar, é necessário ter o chrome e o python instalados, além de baixar as depêndencias dos scripts, rodando no cmd "pip install requirement.txt"
