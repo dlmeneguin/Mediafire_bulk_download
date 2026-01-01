@@ -7,7 +7,7 @@ mediafire_scraper.py,
 downloader_requests.py,
 downloader_selenium.py
 
-Para funcionar, é necessário ter o chrome e o python instalados, além de baixar as depêndencias dos scripts, rodando no cmd "pip install requirement.txt"
+Para funcionar, é necessário ter o chrome e o python instalados, além de baixar as depêndencias dos scripts, rodando no cmd "pip install -r requirements.txt"
 
 A maneira que eles funcionam é que, primeiro deve-se pegar o link da pasta que deseja baixar do mediafire, agora, colocando este url em (START_URL = "SUA_URL") ao final do mediafire_scraper.py, o código irá recursivamente passar por todos os arquivos que devem ser instalados, mantendo o caminho de cada um e salvando o link de download, o output deste arquivo será mediafire_links.csv contendo todas essas informações.
 
