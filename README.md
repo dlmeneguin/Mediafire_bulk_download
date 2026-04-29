@@ -1,14 +1,115 @@
-# Mediafire_bulk_download
-Pastas que não foram comprimidas do mediafire são difíceis de baixar e requerem o premium do site, esta série de scripts python busca resolver este problema, baixando a pasta por meio do scrapping do Url fornecido
+# 📁 Mediafire Bulk Downloader
 
-Neste repositório, você encontrará ao todo 3 scripts em python
+Download entire Mediafire folders without a premium account — using web scraping and automated downloading.
 
-mediafire_scraper.py,
-downloader_requests.py,
-downloader_selenium.py
+> Mediafire doesn't offer a native way to download uncompressed folders for free. This toolset solves that by scraping all file links from a folder URL and downloading them locally while preserving the original directory structure.
 
-Para funcionar, é necessário ter o chrome e o python instalados, além de baixar as depêndencias dos scripts, rodando no cmd "pip install -r requirements.txt"
+---
 
-A maneira que eles funcionam é que, primeiro deve-se pegar o link da pasta que deseja baixar do mediafire, agora, colocando este url em (START_URL = "SUA_URL") ao final do mediafire_scraper.py, o código irá recursivamente passar por todos os arquivos que devem ser instalados, mantendo o caminho de cada um e salvando o link de download, o output deste arquivo será mediafire_links.csv contendo todas essas informações.
+## 🛠️ How It Works
 
-Com o mediafire_links.csv, rode o downloader_requests, que baixará todos os arquivos enquanto mantém a estrutura original da pasta, naturalmente haverá erros, pois o mediafire bloqueia algumas solicitações autônomas, os arquivos que o código não conseguir baixar serão salvos em erros.csv e devem ser instalados por meio do downloader_selenium, que lerá o erros.csv e instalará os arquivos faltantes de maneira mais confiável, porém mais lenta.
+The workflow is split into three scripts that run in sequence:
+
+```
+mediafire_scraper.py  →  downloader_requests.py  →  downloader_selenium.py (fallback)
+```
+
+### 1. `mediafire_scraper.py` — Link Scraper
+Set your target folder URL in the script:
+```python
+START_URL = "YOUR_FOLDER_URL_HERE"
+```
+The scraper recursively traverses all subfolders, collects every file's download link, and preserves the original path structure.
+
+**Output:** `mediafire_links.csv`
+
+---
+
+### 2. `downloader_requests.py` — Fast Downloader
+Reads `mediafire_links.csv` and downloads all files using HTTP requests, recreating the original folder structure locally.
+
+Mediafire may block some automated requests. Files that fail to download are logged separately.
+
+**Output:** downloaded files + `errors.csv` (failed downloads)
+
+---
+
+### 3. `downloader_selenium.py` — Fallback Downloader
+Reads `errors.csv` and retries the failed downloads using a browser-based approach via Selenium. Slower, but significantly more reliable for files that were blocked.
+
+---
+
+## ✅ Requirements
+
+- Python 3.x
+- Google Chrome installed
+- Python dependencies (install with the command below)
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🚀 Usage
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/dlmeneguin/Mediafire_bulk_download.git
+   cd Mediafire_bulk_download
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Open `mediafire_scraper.py` and set your folder URL:
+   ```python
+   START_URL = "https://www.mediafire.com/folder/your-folder-id"
+   ```
+
+4. Run the scraper:
+   ```bash
+   python mediafire_scraper.py
+   ```
+
+5. Download files:
+   ```bash
+   python downloader_requests.py
+   ```
+
+6. If any files failed, run the Selenium fallback:
+   ```bash
+   python downloader_selenium.py
+   ```
+
+---
+
+## 📂 Output Structure
+
+```
+your-folder/
+├── subfolder-a/
+│   ├── file1.ext
+│   └── file2.ext
+└── subfolder-b/
+    └── file3.ext
+
+mediafire_links.csv   ← all scraped links
+errors.csv            ← files that failed in step 2
+```
+
+---
+
+## ⚠️ Notes
+
+- This tool is intended for downloading content you have legitimate access to.
+- Mediafire's anti-bot measures may cause some downloads to fail on the first pass — the Selenium fallback handles those cases.
+- ChromeDriver is managed automatically; just make sure Chrome is installed.
+
+---
+
+## 📄 License
+
+MIT
